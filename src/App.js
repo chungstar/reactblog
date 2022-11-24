@@ -7,6 +7,7 @@ function App() {
   let [title1, titleChange] = useState(['남자 코트 추천','여자 코트 추천','남자 바지 추천']);
   let [likeButton, likeChange] = useState([0,0,0]);
   let [modal, setModal] = useState(false);
+  let [titleNum, setTitleNum] = useState(0);
 
   return (
     <div className="App">
@@ -37,7 +38,7 @@ function App() {
         title1.map(function(a, i){
           return(
             <div className="list" key={i}>
-             <h4 onClick={()=>{setModal(!modal)}}>{ title1[i] }</h4>
+             <h4 onClick={()=>{setModal(!modal); setTitleNum(i)}}>{ title1[i] }</h4>
              <span onClick={ () => {
                 let copy = [...likeButton];
                 copy[i] = likeButton[i]+1;
@@ -49,9 +50,8 @@ function App() {
           )
         })
       }
-
       {
-        modal == true ? <Modal></Modal> : null
+        modal == true ? <Modal titleNum = {titleNum} titleChange = {titleChange} title1={title1}></Modal> : null
       }
       
 
@@ -60,14 +60,18 @@ function App() {
   
 }
 
-function Modal(){
+function Modal(props){
   return(
       <div className="modal">
-        <h4>제목</h4>
+        <h4>{ props.title1[props.titleNum] }</h4>
         <p>날짜</p>
         <p>상세내용</p>
+        <button onClick={()=>{
+          let copy = [...props.title1];
+          copy[0] = '제목 바꿈';
+          props.titleChange(copy);
+        }}>글수정</button>
       </div>
-
   )
 }
 
