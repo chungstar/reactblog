@@ -8,6 +8,7 @@ function App() {
   let [likeButton, likeChange] = useState([0,0,0]);
   let [modal, setModal] = useState(false);
   let [titleNum, setTitleNum] = useState(0);
+  let [입력값,입력값변경] = useState('');
 
   return (
     <div className="App">
@@ -38,20 +39,37 @@ function App() {
         title1.map(function(a, i){
           return(
             <div className="list" key={i}>
-             <h4 onClick={()=>{setModal(!modal); setTitleNum(i)}}>{ title1[i] }</h4>
-             <span onClick={ () => {
+             <h4 onClick={()=>{setModal(!modal); setTitleNum(i)}}>{ title1[i] }
+             <span onClick={ (e) => {e.stopPropagation();
                 let copy = [...likeButton];
                 copy[i] = likeButton[i]+1;
                 likeChange(copy)
                 } }>👍</span>{ likeButton[i] }
-             
+             </h4>
              <p>시간</p>
+             <button onClick={()=>{
+               let copy = [...title1];
+               copy.splice(i, 1);
+               titleChange(copy);
+             }}>삭제</button>
             </div>
           )
         })
       }
+      
+      <input onChange={(e)=>{
+        입력값변경(e.target.value);
+        }}></input>
+      <button onClick={()=>{
+        let copy = [...title1];
+        copy.unshift(입력값);
+        titleChange(copy)
+      }}>입력</button>
+      
       {
-        modal == true ? <Modal titleNum = {titleNum} titleChange = {titleChange} title1={title1}></Modal> : null
+        modal == true 
+        ? <Modal titleNum = {titleNum} titleChange = {titleChange} title1={title1}></Modal> 
+        : null
       }
       
 
@@ -71,6 +89,7 @@ function Modal(props){
           copy[0] = '제목 바꿈';
           props.titleChange(copy);
         }}>글수정</button>
+        
       </div>
   )
 }
